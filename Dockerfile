@@ -9,7 +9,7 @@
 
  # Install any needed packages specified in requirements.txt
  # If you don't have a requirements.txt, create one using pip freeze > requirements.txt
- RUN pip install flask bs4 requests
+ RUN pip install flask bs4 requests googletrans
 
  # Make port 5000 available to the world outside this container
  EXPOSE 5000

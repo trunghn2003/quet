@@ -1,10 +1,11 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import requests
 from bs4 import BeautifulSoup
 import json
 import time
 from datetime import datetime
-
+from googletrans import Translator
+import asyncio
 def scrape_article_content(url):
     """Scrape full article content from a given URL"""
     headers = {
@@ -96,6 +97,28 @@ def scrape_articles(id):
 
     results = process_article_batch(articles, competition_name)
     return jsonify({"competition_id": id, "competition_name": competition_name, "results": results})
+translator = Translator()
+
+@app.route('/translate', methods=['POST'])
+def translate_text():
+    if request.is_json:
+        data = request.get_json()
+        text = data.get('text', '')
+    else:
+        text = request.form.get('text', '')
+
+    if not text:
+        return jsonify({'error': 'Missing text input'}), 400
+
+    try:
+        result = asyncio.run(translator.translate(text, src='en', dest='vi'))
+        return jsonify({
+            'input_text': text,
+            'translated_text': result.text
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
