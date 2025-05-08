@@ -91,7 +91,7 @@ def scrape_articles(id):
         'q': competition_name,
         'apiKey': '36d9028b015549a6a0baa43b932bc06e',
         'language': 'en',
-        'pageSize': 3,
+        'pageSize': 1,
         'sortBy': 'publishedAt',
     }).json().get('articles', [])
 
